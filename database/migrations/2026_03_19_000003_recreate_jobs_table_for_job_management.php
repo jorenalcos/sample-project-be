@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title')->index();
             $table->text('description');
             $table->string('company')->index();
+            $table->string('category')->index();
             $table->decimal('salary', 12, 2)->nullable();
             $table->string('location')->index();
             $table->enum('status', ['open', 'closed'])->default('open')->index();

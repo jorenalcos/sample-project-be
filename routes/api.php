@@ -9,20 +9,17 @@ use Illuminate\Support\Facades\Route;
 | API Routes
 |--------------------------------------------------------------------------
 |
-| This API uses session-based authentication (cookie + server session).
-| CSRF is disabled for /api/* in bootstrap/app.php for simplicity.
+| This API uses token-based authentication (Laravel Sanctum).
 |
 */
 
-Route::middleware(['web'])->group(function () {
-    Route::prefix('auth')->group(function () {
-        Route::post('login', [AuthController::class, 'login']);
-        Route::post('logout', [AuthController::class, 'logout'])->middleware('auth');
-        Route::get('me', [AuthController::class, 'me'])->middleware('auth');
-    });
+Route::prefix('auth')->group(function () {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+    Route::get('me', [AuthController::class, 'me'])->middleware('auth:sanctum');
+});
 
-    Route::middleware('auth')->group(function () {
-        Route::apiResource('jobs', JobController::class);
-    });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('jobs', JobController::class);
 });
 

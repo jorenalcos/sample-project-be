@@ -11,18 +11,19 @@ class AuthController extends ApiController
     public function login(LoginRequest $request)
     {
         $credentials = $request->only(['email', 'password']);
-        $remember = (bool) $request->boolean('remember', false);
 
-        if (! Auth::attempt($credentials, $remember)) {
+        if (! Auth::attempt($credentials)) {
             return $this->failure('Invalid credentials.', 422);
         }
-
-        $request->session()->regenerate();
 
         /** @var \App\Models\User $user */
         $user = $request->user();
 
+        $tokenName = $request->userAgent() ?: 'api-token';
+        $token = $user->createToken($tokenName)->plainTextToken;
+
         return $this->success([
+            'token' => $token,
             'user' => [
                 'id' => $user->id,
                 'name' => $user->name,
@@ -33,10 +34,12 @@ class AuthController extends ApiController
 
     public function logout(Request $request)
     {
-        Auth::logout();
+        /** @var \App\Models\User $user */
+        $user = $request->user();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        if ($user && $user->currentAccessToken()) {
+            $user->tokens()->where('id', $user->currentAccessToken()->id)->delete();
+        }
 
         return $this->success(null, 'Logged out.', 200);
     }

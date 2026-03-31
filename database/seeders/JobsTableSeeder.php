@@ -10,8 +10,13 @@ class JobsTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('jobs')->insert([
+            'title' => 'Sample Title',
             'description' => 'Sample job from seeder',
-            'created_at' => now()->timestamp,
+            'company' => 'Sample company',
+            'category' => 'Sample Category',
+            'location' => 'Sample location',
+            'status' => 'open',
+            'created_at' => now()->toDateTimeString(),
         ]);
     }
 }
