@@ -16,7 +16,6 @@ class UpdateJobRequest extends FormRequest
         return [
             'title' => ['sometimes', 'required', 'string', 'max:255'],
             'description' => ['sometimes', 'required', 'string'],
-            'company' => ['sometimes', 'required', 'string', 'max:255'],
             'salary' => ['sometimes', 'nullable', 'numeric'],
             'location' => ['sometimes', 'required', 'string', 'max:255'],
             'status' => ['sometimes', 'required', 'in:open,closed'],

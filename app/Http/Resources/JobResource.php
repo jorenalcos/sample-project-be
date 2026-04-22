@@ -13,16 +13,20 @@ class JobResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $company = $this->whenLoaded('company');
+
         return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'company' => $this->company,
+            'company' => $company ? [
+                'id' => $company?->id,
+                'name' => $company->name,
+                'email' => $company->email,
+            ] : null,
             'salary' => $this->salary,
             'location' => $this->location,
-            'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'status' => $this->status
         ];
     }
 }

@@ -11,9 +11,8 @@ class JobsTableSeeder extends Seeder
     {
         DB::table('jobs')->insert([
             'title' => 'Sample Title',
+            'company_id' => 1,
             'description' => 'Sample job from seeder',
-            'company' => 'Sample company',
-            'category' => 'Sample Category',
             'location' => 'Sample location',
             'status' => 'open',
             'created_at' => now()->toDateTimeString(),

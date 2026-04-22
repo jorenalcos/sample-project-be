@@ -23,13 +23,16 @@ class JobRepository
         $perPage = max(1, min(100, $perPage));
 
         return Job::query()
+            ->with('company:id,name,email')
             ->when($search !== '', function ($query) use ($search) {
                 $like = '%'.str_replace('%', '\\%', $search).'%';
 
                 $query->where(function ($q) use ($like) {
                     $q->where('title', 'like', $like)
-                        ->orWhere('company', 'like', $like)
-                        ->orWhere('location', 'like', $like);
+                        ->orWhere('location', 'like', $like)
+                        ->orWhereHas('company', function ($companyQ) use ($like) {
+                            $companyQ->where('name', 'like', $like);
+                        });
                 });
             })
             ->latest('id')

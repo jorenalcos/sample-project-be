@@ -13,10 +13,9 @@ return new class extends Migration
 
         Schema::create('jobs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained('users')->cascadeOnDelete()->index();
             $table->string('title')->index();
             $table->text('description');
-            $table->string('company')->index();
-            $table->string('category')->index();
             $table->decimal('salary', 12, 2)->nullable();
             $table->string('location')->index();
             $table->enum('status', ['open', 'closed'])->default('open')->index();
